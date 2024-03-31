@@ -116,25 +116,4 @@ class MinecraftRevisions:
         return unify_format(lower_rev), unify_format(upper_rev)
 
     def _get_current_revisions(self):
-        """
-        page = urlopen(self.url)
-        html = page.read().decode("utf-8")
-        soup = BeautifulSoup(html, "html.parser")
-        line_by_line = soup.get_text().replace('\n\n', '').split("\n")
-        rev_dict = {}
-        for line in line_by_line:
-            print(line)
-        if self.is_resource_pack:
-            target_line = "Resource pack formats"
-        else:
-            target_line = "Data pack formats"
-        start = line_by_line.index(target_line)
-        if start <= 0:
-            Exception('Failure in querying Minecraft Wiki. '
-                      'No resource pack data detected.')
-        start += 4 # to skip the value, versions, releases, breaking changes sections. see? i told you. spaghetti.
-        for i in range(start, len(line_by_line)):
-            rev_dict[line_by_line[i].strip()] = self._convert_revision_to_integer_range(line_by_line[i+2].strip())
-            i += 4 # skip other values
-        print(rev_dict)
-        """
+        pass
