@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from urllib.request import urlopen
 import zipfile
 import tempfile
+import json
 import os
 from packaging import version
 
@@ -36,7 +37,7 @@ class UpdateModpack:
             self.update_modpack(filepath)
 
     def translate_revision(self, revision):
-        return '18'  # until i can fix the revision behavior.
+        return 22  # until i can fix the revision behavior.
 
         revision_mapping = MinecraftRevisions(
             self.is_resource_pack).revision_mapping
@@ -56,7 +57,7 @@ class UpdateModpack:
             if not zipfiles:
                 raise Exception(f'Filepath {filepath} contains no zip files.')
             for file in zipfiles:
-                self.update_zip(file)
+                self.update_zip(os.path.join(filepath, file))
         else:
             self.update_zip(filepath)
 
@@ -76,16 +77,16 @@ class UpdateModpack:
                     else:
                         with zin.open(filename) as fp:
                             updated = self.update_mcmeta(fp.read().decode())
-                            zout.writestr(item, updated)
+                            zout.writestr(item, json.dumps(updated, indent=2))
 
         # replace with the temp archive
         os.remove(zipname)
         os.rename(tmpname, zipname)
 
     def update_mcmeta(self, outp):
-        outp = eval(outp)
-        outp['pack']['pack_format'] = self.pack_format
-        return str(outp)
+        outp = eval(str(outp))
+        outp['pack']['pack_format'] = int(self.pack_format)
+        return outp
 
 
 class MinecraftRevisions:
